@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "vercel dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "crawler": "node test.js"
+    "schedule": "node api/schedule.js"
   },
   "dependencies": {
     "eslint": "8.44.0",
