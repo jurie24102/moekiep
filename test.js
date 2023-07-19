@@ -649,8 +649,7 @@ async function MobileSite() {
   }
 }
 
-cron.schedule('*/5 * * * *', () => {
-  MobileSite();
-});
+const interval = 1 * 60 * 1000;
+setInterval(MobileSite, interval);
 
 module.exports = MobileSite;
