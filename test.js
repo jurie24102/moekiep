@@ -3,8 +3,6 @@ const {
   sendSuccessEmail
 } = require('./emailSender');
 
-const cron = require('node-cron');
-
 const {
   chromium
 } = require('playwright');
