@@ -1,69 +1,14 @@
 
-
-const {
-  chromium
-} = require('playwright');
-
-const nodemailer = require('nodemailer');
-
-async function sendErrorEmail(error) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'jurie24102@gmail.com',
-      pass: 'tnijvrspuyerpesk',
-    },
-  });
-
-  const mailOptions = {
-    from: 'jurie24102@gmail.com',
-    to: 'jurie24102@gmail.com',
-    subject: 'Playwright Script Error',
-    text: `An error occurred while running the Playwright script:\n\n${error}`,
-  };
-
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.response);
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-}
-
-async function sendSuccessEmail(successful) {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'jurie24102@gmail.com',
-        pass: 'tnijvrspuyerpesk', 
-      },
-    });
-  
-    const mailOptions = {
-      from: 'jurie24102@gmail.com',
-      to: 'jurie24102@gmail.com',
-      subject: 'Playwright Script Success',
-      text: `Playwright script:\n\n${successful} ran a successful test i think`,
-    };
-  
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log('Email sent:', info.response);
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  }
-
-module.exports = { sendErrorEmail, sendSuccessEmail };
-
+const { sendErrorEmail, sendSuccessEmail } = require('../emailSender.js');
+const { chromium } = require('playwright');
 
 async function MobileSite() {
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
+  const timestamp = new Date().toString();
 
   try {
-
     await page.goto('https://www.kastelo.co.za/');
     await page.locator('header').getByText('Products').click();
     await page.getByRole('menuitem', {
@@ -688,10 +633,10 @@ async function MobileSite() {
       name: 'Maximize your money with our innovative technology.'
     }).click();
 
-    await sendSuccessEmail("Mobile site crawler");
+    await sendSuccessEmail("Mobile site crawler", timestamp);
 
   } catch (error) {
-    await sendErrorEmail(error);
+    await sendErrorEmail("Mobile site crawler", error, timestamp);
   } finally {
     await browser.close();
   }
